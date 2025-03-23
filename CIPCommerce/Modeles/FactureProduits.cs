@@ -10,6 +10,8 @@ namespace CIPCommerce.Modeles
 
         public int IdProduit { get; set; }
 
+        public int Qte {  get; set; }
+
         [ForeignKey("IdFacture")]
         public Facture LaFacture { get; set; }
 

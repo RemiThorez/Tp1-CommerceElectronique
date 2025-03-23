@@ -8,6 +8,8 @@ namespace CIPCommerce.Modeles
 
         public int IdAcheteur {  get; set; }
 
+        public DateTime DateAchat {  get; set; }
+
         [ForeignKey("IdAcheteur")]
         public Utilisateur Acheteur { get; set; }
     }
