@@ -8,6 +8,8 @@
 
         public string Identifiant {  get; set; }
 
-        public string Mdo { get; set; }
-}
+        public string Mdp { get; set; }
+
+        public bool Role { get; set; }
+    }
 }
