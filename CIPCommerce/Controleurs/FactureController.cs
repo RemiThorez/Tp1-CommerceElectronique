@@ -29,7 +29,7 @@ namespace CIPCommerce.Controleurs
             {
                 return BadRequest();
             }
-            return Ok(new ObtenirVenteDTO(utilisateurAuth.Id));
+            return Ok(new ObtenirFactureDTO(utilisateurAuth.Id));
         }
 
         [HttpGet("achats")]
