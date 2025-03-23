@@ -8,9 +8,8 @@ namespace CIPCommerce
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -24,7 +23,7 @@ namespace CIPCommerce
             }
 
             app.UseAuthorization();
-
+            app.UseMvc();
 
             app.MapControllers();
 
