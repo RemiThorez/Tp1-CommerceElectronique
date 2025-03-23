@@ -1,6 +1,19 @@
-﻿namespace CIPCommerce.Modeles
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CIPCommerce.Modeles
 {
-    public class FactureProduits
+    public partial class FactureProduits
     {
+        public int Id { get; set; }
+
+        public int IdFacture {  get; set; }
+
+        public int IdProduit { get; set; }
+
+        [ForeignKey("IdFacture")]
+        public Facture LaFacture { get; set; }
+
+        [ForeignKey("IdProduit")]
+        public Produit LeProduit { get; set; }
     }
 }
