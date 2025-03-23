@@ -6,7 +6,7 @@
 
         public ObtenirVenteDTO(int idVendeur)
         {
-            LesProduits.Clear();
+            LesProduits = new List<ProduitVenteDTO>();
             MontantTotal = 0;
 
             BdContexteCommerce _bd = new BdContexteCommerce();

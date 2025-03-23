@@ -6,7 +6,7 @@
 
         public ObtenirAchatDTO(List<Facture> facturesUtilisateurs) 
         {
-            LesProduits.Clear();
+            LesProduits = new List<ProduitAchatDTO>();
             MontantTotal = 0;
 
             BdContexteCommerce _bd = new BdContexteCommerce();
