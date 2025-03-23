@@ -3,7 +3,19 @@
     public class ObtenirProduitDTO
     {
         public ObtenirProduitDTO() { }
-        public int Id { get; set; }
+
+        public ObtenirProduitDTO(Produit produit)
+        {
+            IdProduit = produit.Id;
+            Titre = produit.Titre;
+            Prix = produit.Prix;
+            Categorie = produit.Categorie;
+            Image = produit.Image;
+            IdVendeur = produit.IdVendeur;
+            NomVendeur = produit.Vendeur.Nom;
+        }
+
+        public int IdProduit { get; set; }
 
         public string Titre { get; set; }
 
@@ -14,5 +26,7 @@
         public string Image { get; set; }
 
         public int IdVendeur { get; set; }
+
+        public string NomVendeur { get; set; }
     }
 }

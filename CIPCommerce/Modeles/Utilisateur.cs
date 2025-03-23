@@ -1,7 +1,10 @@
-﻿namespace CIPCommerce.Modeles
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CIPCommerce.Modeles
 {
     public partial class Utilisateur
     {
+        [Key]
         public int Id { get; set; }
 
         public string Nom {  get; set; }

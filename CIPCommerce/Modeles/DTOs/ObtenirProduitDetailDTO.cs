@@ -1,10 +1,24 @@
-﻿namespace CIPCommerce.Modeles.DTOs
+﻿using System.Runtime.CompilerServices;
+
+namespace CIPCommerce.Modeles.DTOs
 {
     public class ObtenirProduitDetailDTO
     {
         public ObtenirProduitDetailDTO() { }
 
-        public int Id { get; set; }
+        public ObtenirProduitDetailDTO(Produit produit)
+        {
+            IdProduit = produit.Id;
+            Titre = produit.Titre;
+            Description = produit.Description;
+            Prix = produit.Prix;
+            Categorie = produit.Categorie;
+            Image = produit.Image;
+            IdVendeur = produit.IdVendeur;
+            NomVendeur = produit.Vendeur.Nom;
+        }
+
+        public int IdProduit { get; set; }
 
         public string Titre { get; set; }
 
@@ -17,6 +31,8 @@
         public string Image { get; set; }
 
         public int IdVendeur { get; set; }
+
+        public string NomVendeur { get; set; }
 
     }
 }

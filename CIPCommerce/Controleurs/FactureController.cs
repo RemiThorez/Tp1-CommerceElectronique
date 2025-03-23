@@ -34,8 +34,6 @@ namespace CIPCommerce.Controleurs
 
         [HttpGet("achats")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirAchatDTO))]
         public IActionResult ObtenirAchats()
         {
@@ -50,8 +48,6 @@ namespace CIPCommerce.Controleurs
 
         [HttpGet("ventes")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type =typeof(BadRequestResult))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type =typeof(UnauthorizedResult))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type =typeof(NotFoundResult))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirVenteDTO))]
         public IActionResult ObtenirVentes()
         {

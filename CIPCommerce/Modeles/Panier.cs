@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CIPCommerce.Modeles
 {
     public partial class Panier
     {
+        [Key]
         public int Id { get; set; }
 
         public int IdAcheteur {  get; set; }
