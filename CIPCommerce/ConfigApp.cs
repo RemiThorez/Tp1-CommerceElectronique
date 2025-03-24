@@ -9,6 +9,5 @@
         /// Shut c'est un secret...
         /// </summary>
         public string Secret { get; set; } = null!;
-        public string ChaineConnexion { get; set; } = null!;
     }
 }

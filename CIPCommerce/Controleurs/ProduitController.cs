@@ -45,7 +45,7 @@ namespace CIPCommerce.Controleurs
         }
 
 
-        [HttpGet]
+        [HttpGet("mesProduits")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirProduitDTO>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult ObtenirMesProduits()

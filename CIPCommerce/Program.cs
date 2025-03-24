@@ -1,4 +1,4 @@
-
+using Stripe;
 using CIPCommerce.Modeles;
 
 namespace CIPCommerce
@@ -10,8 +10,12 @@ namespace CIPCommerce
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<BdContexteCommerce>();
-            builder.Services.Configure<ConfigApp>(builder.Configuration.GetSection("ConfigApp"));
 
+            
+            builder.Services.Configure<ConfigApp>(builder.Configuration.GetSection("ConfigApp"));
+            builder.Services.Configure<StripeConfig>(builder.Configuration.GetSection("Stripe"));
+
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             // Add services to the container.
             builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
