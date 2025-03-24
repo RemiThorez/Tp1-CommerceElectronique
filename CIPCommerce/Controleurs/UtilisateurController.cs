@@ -99,7 +99,7 @@ namespace CIPCommerce.Controleurs
         {
             List<ObtenirUsagerDTO> usagerDTOs = new List<ObtenirUsagerDTO>();
 
-            _bd.TableUtilisateur.Where(u => u.Role == true).ToList().ForEach(u => usagerDTOs.Add(new ObtenirUsagerDTO(u)));
+            _bd.TableUtilisateur.Where(u => u.Role == true && u.Actif).ToList().ForEach(u => usagerDTOs.Add(new ObtenirUsagerDTO(u)));
 
             return Ok(usagerDTOs);
         }
