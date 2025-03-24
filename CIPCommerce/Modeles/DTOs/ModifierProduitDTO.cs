@@ -13,7 +13,7 @@
             produitAModifier.Prix = Prix ?? produitAModifier.Prix;
             produitAModifier.Categorie = Categorie ?? produitAModifier.Categorie;
             produitAModifier.Image = Image ?? produitAModifier.Image;
-
+            produitAModifier.EnVente = EnVente ?? produitAModifier.EnVente;
             bd.SaveChanges();
         }
 
@@ -30,5 +30,7 @@
         public string? Image { get; set; }
 
         public int IdVendeur { get; set; }
+
+        public bool? EnVente { get; set; }
     }
 }

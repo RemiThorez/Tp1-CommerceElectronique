@@ -22,7 +22,7 @@ namespace CIPCommerce.Controleurs
         {
             List<ObtenirProduitDTO> produitsDTOs = new List<ObtenirProduitDTO>();
 
-            _bd.TableProduit.ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
+            _bd.TableProduit.Where(p => p.EnVente).ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
 
             return Ok(produitsDTOs);
         }
@@ -39,7 +39,7 @@ namespace CIPCommerce.Controleurs
 
             List<ObtenirProduitDTO> produitsDTOs = new List<ObtenirProduitDTO>();
 
-            _bd.TableProduit.Where(p => p.Categorie == categorie).ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
+            _bd.TableProduit.Where(p => p.Categorie == categorie && p.EnVente).ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
 
             return Ok(produitsDTOs);
         }
@@ -47,6 +47,7 @@ namespace CIPCommerce.Controleurs
         [HttpGet("vendeur/{idVendeur}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirProduitDTO>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
         public IActionResult ObtenirProduitsVendeur(int idVendeur)
         {
             if(idVendeur < 0)
@@ -54,9 +55,14 @@ namespace CIPCommerce.Controleurs
                 return BadRequest();
             }
 
+            if(!_bd.TableUtilisateur.Where(u => u.Id == idVendeur && u.Actif).Any())
+            {
+                return NotFound();
+            }
+
             List<ObtenirProduitDTO> produitsDTOs = new List<ObtenirProduitDTO>();
 
-            _bd.TableProduit.Where(p => p.IdVendeur == idVendeur).ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
+            _bd.TableProduit.Where(p => p.IdVendeur == idVendeur && p.EnVente).ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
 
             return Ok(produitsDTOs);
         }
@@ -72,9 +78,9 @@ namespace CIPCommerce.Controleurs
                 return BadRequest();
             }
 
-            Produit produit = _bd.TableProduit.Find(id);
+            Produit? produit = _bd.TableProduit.Find(id);
 
-            if(produit == null)
+            if(produit == null || !produit.EnVente)
             {
                 return NotFound();
             }
@@ -87,7 +93,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult ObtenirPanier()
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
@@ -102,7 +108,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
         public IActionResult CreerProduit([FromBody] CreerProduitDTO produit)
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
@@ -126,7 +132,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
         public IActionResult ModifierProduit([FromBody] ModifierProduitDTO produitModifier)
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
@@ -138,7 +144,7 @@ namespace CIPCommerce.Controleurs
                 return Unauthorized();
             }
 
-            Produit ancienProduit = _bd.TableProduit.Find(produitModifier.IdProduit);
+            Produit? ancienProduit = _bd.TableProduit.Find(produitModifier.IdProduit);
 
             if(ancienProduit == null)
             {
@@ -160,7 +166,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult AjouterProduitPanier(AjouterProduitPanierDTO nouveauProduit)
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {

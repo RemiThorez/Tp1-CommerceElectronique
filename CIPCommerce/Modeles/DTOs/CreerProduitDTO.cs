@@ -15,6 +15,7 @@
             produit.Image = Image;
             produit.IdVendeur = IdVendeur;
             produit.Vendeur = bd.TableUtilisateur.Find(IdVendeur);
+            produit.EnVente = EnVente;
 
             return produit;
         }
@@ -30,5 +31,7 @@
         public string Image { get; set; }
 
         public int IdVendeur { get; set; }
+
+        public bool EnVente { get; set; }
     }
 }

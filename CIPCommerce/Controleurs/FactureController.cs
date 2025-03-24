@@ -23,7 +23,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status200OK, Type =typeof(ObtenirFactureDTO))]
         public IActionResult ObtenirFactures()
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
@@ -37,7 +37,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirAchatDTO))]
         public IActionResult ObtenirAchats()
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
@@ -51,7 +51,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirVenteDTO))]
         public IActionResult ObtenirVentes()
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {

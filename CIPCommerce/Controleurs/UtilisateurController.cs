@@ -66,7 +66,7 @@ namespace CIPCommerce.Controleurs
                 return Conflict();
             }
 
-            Utilisateur utilisateur = nouveauUtilisateur.RetoutrnerUtilisateur();
+            Utilisateur? utilisateur = nouveauUtilisateur.RetoutrnerUtilisateur();
          
             _bd.TableUtilisateur.Add(utilisateur);
             _bd.SaveChanges();
@@ -81,7 +81,7 @@ namespace CIPCommerce.Controleurs
         {
             utilisateurModifier.Mdp = HacheurProfessionel(utilisateurModifier.Mdp);
 
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
@@ -109,7 +109,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
         public IActionResult ObtenirUtilisateur(int id)
         {
-            Utilisateur utilisateur = _bd.TableUtilisateur.Find(id);
+            Utilisateur? utilisateur = _bd.TableUtilisateur.Find(id);
             if(utilisateur == null)
                 return NotFound();
             return Ok(new ObtenirUsagerDTO(utilisateur));
@@ -120,7 +120,7 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult DesactiverUtilisateur()
         {
-            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
             if (utilisateurAuth == null)
             {
