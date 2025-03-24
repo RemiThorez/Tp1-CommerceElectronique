@@ -44,6 +44,31 @@ namespace CIPCommerce.Controleurs
             return Ok(produitsDTOs);
         }
 
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirProduitDTO>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        public IActionResult ObtenirMesProduits()
+        {
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+
+            if(utilisateurAuth == null)
+            {
+                return BadRequest();
+            }
+
+            if(utilisateurAuth.Role == false)
+            {
+                return BadRequest();
+            }
+
+            List<ObtenirProduitDTO> produitsDTOs = new List<ObtenirProduitDTO>();
+
+            _bd.TableProduit.Where(p => p.IdVendeur == utilisateurAuth.Id).ToList().ForEach(p => produitsDTOs.Add(new ObtenirProduitDTO(p)));
+
+            return Ok(produitsDTOs);
+        }
+
         [HttpGet("vendeur/{idVendeur}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirProduitDTO>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
