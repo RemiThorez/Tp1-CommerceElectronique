@@ -16,6 +16,8 @@ namespace CIPCommerce.Modeles
         [Required]
         public bool Role { get; set; }
 
+        public bool Actif { get; set; } = true;
+
         public ICollection<Panier> Paniers { get; set; } = new List<Panier>();
 
         public ICollection<Produit> Produits { get; set; } = new List<Produit>();

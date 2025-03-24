@@ -4,6 +4,8 @@ using CIPCommerce.Modeles.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Options;
+using System.Data;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -31,7 +33,7 @@ namespace CIPCommerce.Controleurs
         {
             if(infoConnexion != null && infoConnexion.Identifiant != null && infoConnexion.Mdp != null)
             {
-                Utilisateur? utilisateur = _bd.TableUtilisateur.Where(u => u.Identifiant ==  infoConnexion.Identifiant).First();
+                Utilisateur? utilisateur = _bd.TableUtilisateur.Where(u => u.Identifiant == infoConnexion.Identifiant && u.Actif).First();
 
                 infoConnexion.Mdp = HacheurProfessionel(infoConnexion.Mdp);
 
@@ -47,36 +49,97 @@ namespace CIPCommerce.Controleurs
             return BadRequest();
         }
 
-        /*[HttpPost]
-        public IActionResult CreerUtilisateur()
+        [HttpPost("creer")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreatedResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ConflictResult))]
+        public IActionResult CreerUtilisateur([FromBody] CreationUsagerDTO nouveauUtilisateur)
         {
+            if (nouveauUtilisateur.Identifiant == null || nouveauUtilisateur.Mdp == null || nouveauUtilisateur.Role == null)
+                return BadRequest();
 
+            nouveauUtilisateur.Mdp = HacheurProfessionel(nouveauUtilisateur.Mdp);
+
+
+            if (_bd.TableUtilisateur.Where(u => u.Identifiant == nouveauUtilisateur.Identifiant).Any())
+            {
+                return Conflict();
+            }
+
+            Utilisateur utilisateur = nouveauUtilisateur.RetoutrnerUtilisateur();
+         
+            _bd.TableUtilisateur.Add(utilisateur);
+            _bd.SaveChanges();
+
+            return Created();
         }
 
-        [HttpPatch]
-        public IActionResult ModifierUtilisateur()
+        [HttpPatch("modifier")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConnexionReussiDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        public IActionResult ModifierUtilisateur([FromBody] ModifierUsagerDTO utilisateurModifier)
         {
+            utilisateurModifier.Mdp = HacheurProfessionel(utilisateurModifier.Mdp);
 
+            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+
+            if (utilisateurAuth == null)
+            {
+                return BadRequest();
+            }
+
+            utilisateurModifier.AppliquerModification(utilisateurAuth.Id, _bd);
+
+            return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("vendeur")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirUsagerDTO>))]
         public IActionResult ObtenirVendeurs()
         {
+            List<ObtenirUsagerDTO> usagerDTOs = new List<ObtenirUsagerDTO>();
 
+            _bd.TableUtilisateur.Where(u => u.Role == true).ToList().ForEach(u => usagerDTOs.Add(new ObtenirUsagerDTO(u)));
+
+            return Ok(usagerDTOs);
         }
 
-        [HttpGet]
-        public IActionResult ObtenirUtilisateur()
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirUsagerDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
+        public IActionResult ObtenirUtilisateur(int id)
         {
-
+            Utilisateur utilisateur = _bd.TableUtilisateur.Find(id);
+            if(utilisateur == null)
+                return NotFound();
+            return Ok(new ObtenirUsagerDTO(utilisateur));
         }
 
-        [HttpDelete]
+        [HttpDelete("desactiver")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OkResult))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult DesactiverUtilisateur()
         {
+            Utilisateur utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
 
+            if (utilisateurAuth == null)
+            {
+                return BadRequest();
+            }
+
+            Utilisateur utilisateur = _bd.TableUtilisateur.Find(utilisateurAuth.Id);
+            utilisateur.Actif = false;
+
+            List<Produit> produits = _bd.TableProduit.Where(p => p.IdVendeur == utilisateurAuth.Id).ToList();
+            produits.ForEach(p => p.EnVente = false);
+
+            _bd.SaveChanges();
+
+            ControllerContext.HttpContext.Items["Utilisateur"] = null;
+
+            return Ok();
         }
-        */
+        
         /// <summary>
         /// La méthode <c>HacheurProffessionel</c> sert à haché le mot de passe, 
         /// c'est ça seul fonction, il ne rajoute pas de sel. Le code vient d'un des labs de piratage que j'ai fait.

@@ -22,6 +22,8 @@ namespace CIPCommerce.Modeles
         [Required]
         public int IdVendeur {  get; set; }
 
+        public bool EnVente { get; set; } = true;
+
         [ForeignKey("IdVendeur")]
         public Utilisateur? Vendeur { get; set; }
 

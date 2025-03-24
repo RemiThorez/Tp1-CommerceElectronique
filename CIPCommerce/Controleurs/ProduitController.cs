@@ -27,7 +27,7 @@ namespace CIPCommerce.Controleurs
             return Ok(produitsDTOs);
         }
 
-        [HttpGet("/{categorie}")]
+        [HttpGet("categorie/{categorie}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirProduitDTO>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult ObtenirProduitsCategorie(string categorie)
@@ -44,7 +44,7 @@ namespace CIPCommerce.Controleurs
             return Ok(produitsDTOs);
         }
 
-        [HttpGet("/{idVendeur}")]
+        [HttpGet("vendeur/{idVendeur}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ObtenirProduitDTO>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         public IActionResult ObtenirProduitsVendeur(int idVendeur)
