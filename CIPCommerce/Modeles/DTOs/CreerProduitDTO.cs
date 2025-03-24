@@ -4,11 +4,9 @@
     {
         public CreerProduitDTO() { }
 
-        public Produit RetournerProduit()
+        public Produit RetournerProduit(BdContexteCommerce bd)
         {
             Produit produit = new Produit();
-
-            BdContexteCommerce _bd = new BdContexteCommerce();
 
             produit.Titre = Titre;
             produit.Description = Description;
@@ -16,7 +14,7 @@
             produit.Categorie = Categorie;
             produit.Image = Image;
             produit.IdVendeur = IdVendeur;
-            produit.Vendeur = _bd.TableUtilisateur.Find(IdVendeur);
+            produit.Vendeur = bd.TableUtilisateur.Find(IdVendeur);
 
             return produit;
         }

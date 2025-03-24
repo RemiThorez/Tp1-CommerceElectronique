@@ -4,18 +4,17 @@
     {
         public FactureDTO() { }
 
-        public FactureDTO(int id) 
+        public FactureDTO(int id, BdContexteCommerce bd) 
         {
             ApercusProduits = new List<ApercuProduitDTO>();
-            BdContexteCommerce _bd = new BdContexteCommerce();
             IdFacture = id;
-            DateAchat = _bd.TableFacture.Find(id).DateAchat;
+            DateAchat = bd.TableFacture.Find(id).DateAchat;
 
-            List<FactureProduits> factureProduits = _bd.TableFactureProduits.Where(fp => fp.IdFacture == id).ToList();
+            List<FactureProduits> factureProduits = bd.TableFactureProduits.Where(fp => fp.IdFacture == id).ToList();
 
             foreach (FactureProduits fp in factureProduits)
             {
-                ApercusProduits.Add(new ApercuProduitDTO(fp.IdProduit, fp.Qte));
+                ApercusProduits.Add(new ApercuProduitDTO(fp.IdProduit, fp.Qte,bd));
             }
         }
 

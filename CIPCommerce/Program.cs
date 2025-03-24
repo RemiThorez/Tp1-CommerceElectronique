@@ -1,4 +1,6 @@
 
+using CIPCommerce.Modeles;
+
 namespace CIPCommerce
 {
     public class Program
@@ -6,6 +8,10 @@ namespace CIPCommerce
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<BdContexteCommerce>();
+            builder.Services.Configure<ConfigApp>(builder.Configuration.GetSection("ConfigApp"));
+
 
             // Add services to the container.
             builder.Services.AddMvc(option => option.EnableEndpointRouting = false);

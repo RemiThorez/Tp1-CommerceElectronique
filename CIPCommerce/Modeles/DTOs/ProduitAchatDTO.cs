@@ -13,7 +13,6 @@
             Qte = qte;
             NomVendeur = produit.Vendeur.Nom;
             IdVendeur = produit.IdVendeur;
-
         }
 
         public int Id { get; set; }

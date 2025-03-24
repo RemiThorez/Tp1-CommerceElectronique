@@ -4,16 +4,15 @@
     {
         public ObtenirFactureDTO() { }
 
-        public ObtenirFactureDTO(int idAcheteur)
+        public ObtenirFactureDTO(int idAcheteur, BdContexteCommerce bd)
         {
             Factures = new List<FactureDTO>();
-            BdContexteCommerce _bd = new BdContexteCommerce();
 
-            List<int> idsFactures = _bd.TableFacture.Where(f => f.IdAcheteur == idAcheteur).Select(f => f.Id).ToList();
+            List<int> idsFactures = bd.TableFacture.Where(f => f.IdAcheteur == idAcheteur).Select(f => f.Id).ToList();
 
             foreach (int id in idsFactures)
             {
-                Factures.Add(new FactureDTO(id));
+                Factures.Add(new FactureDTO(id,bd));
             }
         }
 

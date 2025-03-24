@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace CIPCommerce.Controleurs
 {
     [Produces("application/json")]
-    [Route("api/produit")]
+    [Route("api/produit/")]
     [ApiController]
     public class ProduitController : ControllerBase
     {
-        private BdContexteCommerce _bd;
+        private readonly BdContexteCommerce _bd;
 
-        public ProduitController()
+        public ProduitController(BdContexteCommerce bd)
         {
-            _bd = new BdContexteCommerce();
+            _bd = bd;
         }
 
         [HttpGet]
@@ -93,7 +93,7 @@ namespace CIPCommerce.Controleurs
             {
                 return BadRequest();
             }
-            return Ok(new ObtenirPanierDTO(utilisateurAuth.Id));
+            return Ok(new ObtenirPanierDTO(utilisateurAuth.Id, _bd));
         }
 
         [HttpPost("creer")]
@@ -114,7 +114,7 @@ namespace CIPCommerce.Controleurs
                 return Unauthorized();
             }
 
-            _bd.TableProduit.Add(produit.RetournerProduit());
+            _bd.TableProduit.Add(produit.RetournerProduit(_bd));
             _bd.SaveChanges();
 
             return Created();
@@ -172,7 +172,7 @@ namespace CIPCommerce.Controleurs
                 Panier produitExistant = _bd.TablePanier.Where(p => p.IdProduit == nouveauProduit.IdProduit && p.IdAcheteur == utilisateurAuth.Id).First();
                 produitExistant.Qte += nouveauProduit.Qte;
                 _bd.SaveChanges();
-                return Ok(new ObtenirPanierDTO(utilisateurAuth.Id));
+                return Ok(new ObtenirPanierDTO(utilisateurAuth.Id, _bd));
             }
             else
             {
@@ -184,7 +184,7 @@ namespace CIPCommerce.Controleurs
                 _bd.TablePanier.Add(nouveauProduitPanier);
                 _bd.SaveChanges();
 
-                return Ok(new ObtenirPanierDTO(utilisateurAuth.Id));
+                return Ok(new ObtenirPanierDTO(utilisateurAuth.Id, _bd));
             }
         }
     }

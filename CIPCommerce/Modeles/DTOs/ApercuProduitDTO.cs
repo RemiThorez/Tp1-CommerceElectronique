@@ -4,14 +4,12 @@
     {
         public ApercuProduitDTO() { }
 
-        public ApercuProduitDTO(int id, int qte)
+        public ApercuProduitDTO(int id, int qte, BdContexteCommerce bd)
         {
             IdProduit = id;
             Qte = qte;
 
-            BdContexteCommerce _bd = new BdContexteCommerce();
-
-            Produit p = _bd.TableProduit.Find(id);
+            Produit p = bd.TableProduit.Find(id);
 
             Titre = p.Titre;
             Prix = p.Prix;

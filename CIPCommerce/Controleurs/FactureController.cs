@@ -7,15 +7,15 @@ using System.Net;
 namespace CIPCommerce.Controleurs
 {
     [Produces("application/json")]
-    [Route("api/facture")]
+    [Route("api/facture/")]
     [ApiController]
     public class FactureController : ControllerBase
     {
-        private BdContexteCommerce _bd;
+        private readonly BdContexteCommerce _bd;
 
-        public FactureController()
+        public FactureController(BdContexteCommerce bd)
         {
-            _bd = new BdContexteCommerce();
+            _bd = bd;
         }
 
         [HttpGet("factures")]
@@ -29,7 +29,7 @@ namespace CIPCommerce.Controleurs
             {
                 return BadRequest();
             }
-            return Ok(new ObtenirFactureDTO(utilisateurAuth.Id));
+            return Ok(new ObtenirFactureDTO(utilisateurAuth.Id, _bd));
         }
 
         [HttpGet("achats")]
@@ -43,7 +43,7 @@ namespace CIPCommerce.Controleurs
             {
                 return BadRequest();
             }
-            return Ok(new ObtenirAchatDTO(_bd.TableFacture.Where(f => f.IdAcheteur == utilisateurAuth.Id).ToList()));
+            return Ok(new ObtenirAchatDTO(_bd.TableFacture.Where(f => f.IdAcheteur == utilisateurAuth.Id).ToList(), _bd));
         }
 
         [HttpGet("ventes")]
@@ -57,7 +57,7 @@ namespace CIPCommerce.Controleurs
             {
                 return BadRequest();
             }
-            return Ok(new ObtenirVenteDTO(utilisateurAuth.Id));
+            return Ok(new ObtenirVenteDTO(utilisateurAuth.Id, _bd));
         }
     }
 }

@@ -4,17 +4,16 @@
     {
         public ObtenirPanierDTO() { }
 
-        public ObtenirPanierDTO(int idUsager)
+        public ObtenirPanierDTO(int idUsager, BdContexteCommerce bd)
         {
             LesProduits = new List<ApercuProduitDTO>();
             Total = 0;
 
-            BdContexteCommerce _bd = new BdContexteCommerce();
-            List<Panier> contenuPanierUsager = _bd.TablePanier.Where(p => p.IdAcheteur == idUsager).ToList();
+            List<Panier> contenuPanierUsager = bd.TablePanier.Where(p => p.IdAcheteur == idUsager).ToList();
 
             foreach (Panier p in contenuPanierUsager)
             {
-                LesProduits.Add(new ApercuProduitDTO(p.IdProduit, p.Qte));
+                LesProduits.Add(new ApercuProduitDTO(p.IdProduit, p.Qte, bd));
                 Total += p.LeProduit.Prix * p.Qte;
             }
         }
