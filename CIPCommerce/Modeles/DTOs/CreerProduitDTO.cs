@@ -14,7 +14,6 @@
             produit.Categorie = Categorie;
             produit.Image = Image;
             produit.IdVendeur = IdVendeur;
-            produit.Vendeur = bd.TableUtilisateur.Find(IdVendeur);
             produit.EnVente = EnVente;
 
             return produit;
