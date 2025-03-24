@@ -16,6 +16,7 @@ namespace CIPCommerce.Modeles.DTOs
             Image = produit.Image;
             IdVendeur = produit.IdVendeur;
             NomVendeur = produit.Vendeur.Nom;
+            EnVente = produit.EnVente;
         }
 
         public int IdProduit { get; set; }
@@ -33,6 +34,8 @@ namespace CIPCommerce.Modeles.DTOs
         public int IdVendeur { get; set; }
 
         public string NomVendeur { get; set; }
+
+        public bool EnVente { get; set; }
 
     }
 }

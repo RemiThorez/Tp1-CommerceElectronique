@@ -50,12 +50,12 @@ namespace CIPCommerce.Controleurs
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResult))]
         public IActionResult ObtenirProduitsVendeur(int idVendeur)
         {
-            if(idVendeur < 0)
+            if (idVendeur < 0)
             {
                 return BadRequest();
             }
 
-            if(!_bd.TableUtilisateur.Where(u => u.Id == idVendeur && u.Actif).Any())
+            if (!_bd.TableUtilisateur.Where(u => u.Id == idVendeur && u.Actif).Any())
             {
                 return NotFound();
             }
@@ -80,7 +80,7 @@ namespace CIPCommerce.Controleurs
 
             Produit? produit = _bd.TableProduit.Find(id);
 
-            if(produit == null || !produit.EnVente)
+            if (produit == null || !produit.EnVente)
             {
                 return NotFound();
             }
@@ -115,7 +115,7 @@ namespace CIPCommerce.Controleurs
                 return BadRequest();
             }
 
-            if(utilisateurAuth.Role != true)
+            if (utilisateurAuth.Role != true)
             {
                 return Unauthorized();
             }
@@ -146,12 +146,12 @@ namespace CIPCommerce.Controleurs
 
             Produit? ancienProduit = _bd.TableProduit.Find(produitModifier.IdProduit);
 
-            if(ancienProduit == null)
+            if (ancienProduit == null)
             {
                 return BadRequest();
             }
 
-            if(ancienProduit.IdVendeur != utilisateurAuth.Id)
+            if (ancienProduit.IdVendeur != utilisateurAuth.Id)
             {
                 return Unauthorized();
             }
@@ -173,7 +173,7 @@ namespace CIPCommerce.Controleurs
                 return BadRequest();
             }
 
-            if(_bd.TablePanier.Where(p => p.IdProduit == nouveauProduit.IdProduit && p.IdAcheteur == utilisateurAuth.Id).Any())
+            if (_bd.TablePanier.Where(p => p.IdProduit == nouveauProduit.IdProduit && p.IdAcheteur == utilisateurAuth.Id).Any())
             {
                 Panier produitExistant = _bd.TablePanier.Where(p => p.IdProduit == nouveauProduit.IdProduit && p.IdAcheteur == utilisateurAuth.Id).First();
                 produitExistant.Qte += nouveauProduit.Qte;
@@ -192,6 +192,54 @@ namespace CIPCommerce.Controleurs
 
                 return Ok(new ObtenirPanierDTO(utilisateurAuth.Id, _bd));
             }
+        }
+
+        [HttpPatch("enleverQtePanier/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirPanierDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        public IActionResult EnleverProduitPanierPartiel(int id, [FromBody] int qte)
+        {
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+
+            if (utilisateurAuth == null)
+            {
+                return BadRequest();
+            }
+
+            Panier panier = _bd.TablePanier.Where(p => p.IdProduit == id && p.IdAcheteur == utilisateurAuth.Id).FirstOrDefault();
+
+            if(panier != null)
+            {
+                panier.Qte -= qte;
+                if(panier.Qte <= 0)
+                    _bd.TablePanier.Remove(panier);
+            }
+
+            _bd.SaveChanges();
+            return Ok(new ObtenirPanierDTO(utilisateurAuth.Id, _bd));
+        }
+
+        [HttpDelete("enleverPanier/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ObtenirPanierDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        public IActionResult EnleverProduitPanier(int id)
+        {
+            Utilisateur? utilisateurAuth = ControllerContext.HttpContext.Items["Utilisateur"] as Utilisateur;
+
+            if (utilisateurAuth == null)
+            {
+                return BadRequest();
+            }
+            
+            Panier panier = _bd.TablePanier.Where(p => p.IdProduit == id && p.IdAcheteur == utilisateurAuth.Id).FirstOrDefault();
+
+            if (panier != null)
+            {
+                _bd.TablePanier.Remove(panier);
+            }
+
+            _bd.SaveChanges();
+            return Ok(new ObtenirPanierDTO(utilisateurAuth.Id, _bd));
         }
     }
 }

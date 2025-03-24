@@ -13,6 +13,7 @@
 
             Titre = p.Titre;
             Prix = p.Prix;
+            EnVente = p.EnVente;
         }
 
         public int IdProduit { get; set; }
@@ -22,5 +23,7 @@
         public double Prix { get; set; }
 
         public int Qte { get; set; }
+
+        public bool EnVente { get; set; }
     }
 }
