@@ -7,12 +7,13 @@ namespace CIPCommerce.Modeles
     public partial class Panier
     {
         [Key]
+        [Required]
         public int Id { get; set; }
-
+        [Required]
         public int IdAcheteur {  get; set; }
-
+        [Required]
         public int IdProduit { get; set; }
-
+        [Required]
         public int Qte {  get; set; }
 
         [ForeignKey("IdAcheteur")]

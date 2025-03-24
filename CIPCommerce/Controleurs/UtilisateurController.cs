@@ -2,6 +2,7 @@
 using CIPCommerce.Modeles;
 using CIPCommerce.Modeles.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
@@ -32,6 +33,8 @@ namespace CIPCommerce.Controleurs
             {
                 Utilisateur? utilisateur = _bd.TableUtilisateur.Where(u => u.Identifiant ==  infoConnexion.Identifiant).First();
 
+                infoConnexion.Mdp = HacheurProfessionel(infoConnexion.Mdp);
+
                 if(utilisateur != null)
                 {
                     if (utilisateur.Mdp == infoConnexion.Mdp)
@@ -44,7 +47,7 @@ namespace CIPCommerce.Controleurs
             return BadRequest();
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult CreerUtilisateur()
         {
 
@@ -73,7 +76,7 @@ namespace CIPCommerce.Controleurs
         {
 
         }
-
+        */
         /// <summary>
         /// La méthode <c>HacheurProffessionel</c> sert à haché le mot de passe, 
         /// c'est ça seul fonction, il ne rajoute pas de sel. Le code vient d'un des labs de piratage que j'ai fait.

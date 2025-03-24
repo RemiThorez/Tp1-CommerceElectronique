@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>f495c2f6-ea5e-4cb6-b02a-d76439739065</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controleurs\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
